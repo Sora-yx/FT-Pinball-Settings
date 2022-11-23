@@ -1,0 +1,34 @@
+{
+  "Groups": [
+    {
+      "Name": "Mod",
+      "DisplayName": "Configuration",
+      "Elements": [
+        {
+          "Name": "ballCount",
+          "DisplayName": "Ball Count",
+		  "Description": [
+			"Number of ball(s) for the pinball game. (max 127)"
+		  ],
+          "Type": "int",
+          "MinValue": 1,
+          "MaxValue": 127,
+          "DefaultValue": 6
+        },
+        {
+          "Name": "scoreRequirement",
+          "DisplayName": "Score Requirement",
+          "Description": [
+            "Set the goal you want for the pinball (min 1000, max 2147483647)."
+          ],
+          "Type": "int",
+          "MinValue": 1000,
+          "MaxValue": 2147483647,
+          "DefaultValue": 1000000
+        },
+      ]
+    }
+  ],
+
+  "IniFile": "pinball.ini"
+}

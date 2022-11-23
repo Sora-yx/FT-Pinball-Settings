@@ -1,0 +1,4 @@
+add FT-Pinball-Settings.dll
+add pinball.ini
+add ConfigSchema.json
+add mod.ini
