@@ -1,6 +1,6 @@
 # Frontiers Pinball: Custom Settings Mod
 
-![alt text](https://i.imgur.com/97zyya3.jpeg)
+![alt text](https://i.imgur.com/XDm0hLl.jpeg)
 
 A simple Sonic Frontiers mod for the PC version that I made to learn DLL mods in this game (and sigscan I guess.)
 
