@@ -114,11 +114,14 @@ extern "C" {
         if (reader.ParseError() != 0)
         {
             MessageBox(nullptr, TEXT("Cannot load configuration file, mod won't work.\n"), TEXT("Pinball Settings Mod"), MB_ICONERROR);
+            return;
         }
 
         if (!sigValid)
+        {
             MessageBox(nullptr, TEXT("Unsupported game version\n"), TEXT("Pinball Settings Mod"), MB_ICONERROR);
-
+            return;
+        }
 
         int ball = reader.GetInteger("Mod", "ballCount", ballCount);
         long score = reader.GetInteger("Mod", "scoreRequierement", scoreRequirement);
