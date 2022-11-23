@@ -63,11 +63,6 @@ HOOK(void, __fastcall, redRingSpawn_r, sigRedRingSpawn(), pinballwk* a1, size_t 
     {
         ++redRingSpawnTimer;
 
-        if (redRingSpawnTimer >= RedSpawnTime + 60)
-        {
-            redRingSpawnTimer = 0;
-        }
-
         if (redRingSpawnTimer >= RedSpawnTime) //1200 = 20 seconds
         {
             return originalredRingSpawn_r(a1, a2, a3);
@@ -95,6 +90,20 @@ SIG_SCAN
     "\x83\xFA\x02\x0F\x87\x0D\x01\x00\x00", 
     "xxxxxxxxx"
 )
+
+SIG_SCAN
+(
+    SigredRingGrab,
+    0x14072A7B0, //LMAO
+    "\x48\x89\x7C\x24\x20\x55\x48\x8D\x6C\x24\xA9\x48\x81\xEC\xF0\x00\x00\x00\x48\x8B\xF9\xC6\x81\x58\x02\x00\x00\x00\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x33\xD2\x48\x8B\xC8\xE8\xCC\xCC\xCC\xCC\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x33\xD2\x48\x8B\xC8\xE8\xCC\xCC\xCC\xCC\x48\x8D\x8F\x68\x02\x00\x00\x33\xD2\xE8\xCC\xCC\xCC\xCC\x48\x8D\x8F\x78\x02\x00\x00\x33\xD2\xE8\xCC\xCC\xCC\xCC\xF3\x0F\x10\x05\xCC\xCC\xCC\xCC\x48\x8D\x4D\xB7\x33\xC0\xF3\x0F\x11\x45\x97\x48\x89\x45\x8F\x48\x89\x45\x9F\x48\x89\x45\xA7\x89\x45\xAF\x66\xC7\x45\x87\x01\x00\xC6\x45\x89\x00\xC7\x45\x9B\xFF\xFF\xFF\xFF\xE8\xCC\xCC\xCC\xCC\x48\x8D\x05\xCC\xCC\xCC\xCC\xC6\x45\xD7\x00\x48\x89\x45\x8F\x48\x8B\x87\x50\x02\x00\x00\x48\x89\x45\xE7\xC6\x45\xEF\x01\xC6\x45\x87\x00\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x45\x33\xC0\x48\x8D\x55\x87\x48\x8B\xC8\xE8\xCC\xCC\xCC\xCC\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x4C\x8B\x05\xCC\xCC\xCC\xCC\x48\x8D\x55\x67\x0F\x57\xDB\x48\x8B\xC8\xE8\xCC\xCC\xCC\xCC\xE8\xCC\xCC\xCC\xCC\x48\x8B\xD0\x48\x8B\xCF\xE8\xCC\xCC\xCC\xCC\x4C\x8B\x05\xCC\xCC\xCC\xCC\x48\x8D\x55\x67\x0F\x57\xDB\x48\x8B\xC8\xE8\xCC\xCC\xCC\xCC\x48\x8B\x15", 
+    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxxxxx????xxxxxx????x????xxxxxxx????xxxxxx????xxxxxxxxxx????xxxxxxxxxx????xxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxxxxx????xxxxxxxxxxx????x????xxxxxxx????xxx????xxxxxxxxxxx????x????xxxxxxx????xxx????xxxxxxxxxxx????xxx"
+)
+
+HOOK(void, __fastcall, redRingGrab_r, SigredRingGrab(), size_t a1)
+{
+    redRingSpawnTimer = 0;
+    originalredRingGrab_r(a1);
+}
 
 extern "C" {
 
@@ -130,7 +139,7 @@ extern "C" {
         if (ballCount != 3)
         {
             WRITE_NOP(sigSetBall(), 6); //remove the code that set the number of balls, we will manually set a new one
-            INSTALL_HOOK(pinballInit_r);
+            INSTALL_HOOK(pinballInit_r); //set new ball count
         }
 
         if (ballCount > 3) { //having more than 3 balls mess with red ring spawn timer for some reason... we manually repair that with a custom timer
@@ -138,14 +147,15 @@ extern "C" {
             if (ballCount < 10)
                 WRITE_MEMORY(sigRedRingBall(), uint8_t, ballCount - 1); //check current ballCount instead of hardcoded "2"
             else
-                WRITE_MEMORY(sigRedRingBall(), uint8_t, 0x8);
+                WRITE_MEMORY(sigRedRingBall(), uint8_t, 0x8); //fix crash 
 
-            INSTALL_HOOK(redRingSpawn_r); //repair red ring timer
+            //repair red ring timer
+            INSTALL_HOOK(redRingSpawn_r);
+            INSTALL_HOOK(redRingGrab_r);
         }
 
         if (scoreRequirement != 5000000)
             INSTALL_HOOK(FUN_140718e10_r);
-
     }
 
     __declspec(dllexport) void __cdecl OnFrame()
