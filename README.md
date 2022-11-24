@@ -5,7 +5,7 @@
 A simple Sonic Frontiers mod for the PC version that I made to learn DLL mods in this game (and sigscan I guess.)
 
 The mod allows you to change the settings of the pinball subgame on the Island 3. You can change the number of balls and the score requirement.
-Default settings of the mod gives a much lower score requirement (100k instead of 500) and give you 6 balls instead of 3.
+Default settings of the mod gives a much lower score requirement (1M instead of 5M) and give you 6 balls instead of 3.
 Of course, you can edit those to make this more challenging or even easier, that is up to you.
 
 
