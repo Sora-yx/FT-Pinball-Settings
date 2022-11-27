@@ -124,7 +124,7 @@ extern "C" {
         }
 
         int ball = reader.GetInteger("Mod", "ballCount", ballCount);
-        long score = reader.GetInteger("Mod", "scoreRequierement", scoreRequirement);
+        long score = reader.GetInteger("Mod", "scoreRequirement", scoreRequirement);
 
         if (ball <= 0)
             ball = 1;
